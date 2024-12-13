@@ -1,9 +1,7 @@
 package au.com.telstra.simcardactivator;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
@@ -84,4 +82,15 @@ public class SimCardController {
             return ResponseEntity.status(500).body("Error communicating with actuator");
         }
     }
+    @GetMapping("/query")
+    public ResponseEntity<?> querySimCard(@RequestParam long simCardId) {
+        SimCardTransaction transaction = simCardService.getTransactionById(simCardId);
+        if (transaction != null) {
+            return ResponseEntity.ok(transaction);
+        } else {
+            return ResponseEntity.status(404).body("Transaction not found");
+        }
+    }
+}
+
 }
